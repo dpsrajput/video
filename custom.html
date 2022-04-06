@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!--The viewport meta tag is used to improve the presentation and behavior of the samples 
+      on iOS devices-->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Sample Map</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.12/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.12/esri/css/esri.css">
+    <link href="http://vjs.zencdn.net/4.1/video-js.css" rel="stylesheet" />
+    <script src="http://vjs.zencdn.net/4.1/video.js"></script>
+
+    <style>
+      html, body, #viewDiv {
+        padding:0;
+        margin:0;
+        height:100%;
+      }
+    </style>
+ <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/themes/light/main.css">
+ <script src="https://js.arcgis.com/4.22/"></script>
+    
+    <script>
+      var map;
+
+      require([
+        "esri/Map", 
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/popup/content/CustomContent",
+        
+        
+        
+      ], function(Map,MapView,FeatureLayer,CustomContent) {
+        map = new Map({
+          basemap: "osm",
+        
+        });  
+        const view=new MapView({
+            map:map,
+            container:"viewDiv",
+            center:[77.0266,28.4595],
+             zoom:12,
+        });
+        
+
+        const getContent=new CustomContent({
+        
+            creator: function() {
+                var v = document.createElement ("video");
+                v.src = "http://tecfa.unige.ch/guides/html/html5-video/videos/state-of-wikipedia-480x272.ogv";
+                v.controls = true;
+
+
+            },
+        
+        })
+        const template  = {
+        title:"Name of this point:-{name}",
+        content: [getContent]
+        }
+
+          
+    
+        
+        var featureLayer = new FeatureLayer({
+            url:"https://onemapggm.mcg.gov.in/server/rest/services/OneMapServices/poi_with_ward/MapServer/0",
+    
+            popupTemplate: template,
+            outFields: ["*"]
+        });  
+        
+        map.add(featureLayer);  
+        
+                      
+
+      });
+    </script>
+  </head>
+  
+  <body>
+    
+    <div id="viewDiv"></div>
+
+  </body>
+</html>

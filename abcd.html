@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>ArcGIS REST JS</title>
+    <style>
+      body {
+        font-family: monospace;
+        color: white;
+      }
+      pre {
+        overflow: auto;
+        padding: 1rem;
+      }
+      body,
+      pre {
+        background: #000000;
+      }
+    </style>
+  </head>
+  <body>
+    <pre id="result"></pre>
+    <form>
+        <input type="text" id="username" placeholder="username" name="username">
+        <button type="button" onclick="checkLogin()">Login</button>
+    </form>
+
+    <!-- require ArcGIS REST JS libraries from https://unpkg.com -->
+    <script src="https://unpkg.com/@esri/arcgis-rest-request@3.0.0/dist/umd/request.umd.js"></script>
+    <script src="https://unpkg.com/@esri/arcgis-rest-auth@3.0.0/dist/umd/auth.umd.js"></script>
+    <script src="https://unpkg.com/@esri/arcgis-rest-feature-layer@3.0.0/dist/umd/feature-layer.umd.js"></script>
+    <script>
+      /* when including ArcGIS REST JS all exports are available
+    from the same arcgisRest global */
+function checkLogin(){
+    let username2=document.getElementById("username").value;
+      const apiKey = "AAPK3fe2cc56418547f6a593a2d126286ef7PQAX5g8gSh5kvZdegKJSPG9JCY1EuPPPijJx0dnw5gfC0mCRVYzmVevu87R8eZP-";
+
+      const authentication = new arcgisRest.ApiKey({
+        key: apiKey
+      });
+
+      arcgisRest
+        .queryFeatures({
+          url: "https://services7.arcgis.com/Q3K6zQ0mp2qIgWyN/arcgis/rest/services/hackathonTesting/FeatureServer/0",
+          // where: "email='dpsrajput200@gmail.com'",
+          where: `name= '${username2}'`,
+          outStatistics:[name],
+          resultRecordCount: 1,
+          authentication
+        })
+        .then(function (response){
+          let state=response.features[0].attributes;
+          console.log(state.username2)
+          
+       });
+        
+    };
+    </script>
+
+  </body>
+</html>

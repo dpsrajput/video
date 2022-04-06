@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!--The viewport meta tag is used to improve the presentation and behavior of the samples 
+      on iOS devices-->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Sample Map</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.12/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.12/esri/css/esri.css">
+    <link href="http://vjs.zencdn.net/4.1/video-js.css" rel="stylesheet" />
+    <script src="http://vjs.zencdn.net/4.1/video.js"></script>
+
+    <style>
+      html, body, #viewDiv {
+        padding:0;
+        margin:0;
+        height:100%;
+      }
+    </style>
+ <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/themes/light/main.css">
+ <script src="https://js.arcgis.com/4.22/"></script>
+    
+    <script>
+    let getContent;
+
+      require([
+        "esri/Map", 
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        
+      ], function(Map,MapView,FeatureLayer) {
+        map = new Map({
+          basemap: "osm",
+        
+        });  
+        const view=new MapView({
+            map:map,
+            container:"viewDiv",
+            center:[77.0266,28.4595],
+             zoom:12,
+        });
+        
+        function getContent(){
+          let div=document.createElement('div');
+          
+        div.innerHTML= '<video width="400" height="200" controls autoplay><source src=vid.mp4 type="video/mp4"></video> ';
+        return div  ;
+      }  
+        
+        let featureLayer = new FeatureLayer({
+            url:"https://onemapggm.mcg.gov.in/server/rest/services/OneMapServices/poi_with_ward/MapServer/0",
+            outFields: ["*"],
+            popupTemplate:{
+              title:"Name of this point:-{name}",
+              outFields:["*"], 
+                  
+             fieldInfos: [
+               {
+                  fieldName: "name",
+                  label:"Name"
+               },
+               {
+                    fieldName: "type",
+                    label:"Type"
+              }
+           ],
+           content: getContent
+          }
+        });  
+         map.add(featureLayer);  
+        
+         
+
+      });
+    </script>
+  </head>
+  
+  <body>
+    
+    <div id="viewDiv"></div>
+
+  </body>
+</html>

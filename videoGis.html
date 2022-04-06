@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!--The viewport meta tag is used to improve the presentation and behavior of the samples 
+      on iOS devices-->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Sample Map</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.12/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.12/esri/css/esri.css">
+
+    <style>
+      html, body, #mapDiv {
+        padding:0;
+        margin:0;
+        height:100%;
+      }
+    </style>
+
+    <script src="http://js.arcgis.com/3.12/"></script>
+    <script>
+      var map;
+
+      require([
+        "esri/map", 
+        "esri/layers/FeatureLayer",
+         "esri/dijit/PopupTemplate",
+        "dojo/dom",
+       "dojo/on",
+        "dojo/_base/array",
+         "dojo/domReady!"
+      ], function(
+        Map, FeatureLayer, PopupTemplate,
+        dom, on, array
+      ) {
+        map = new Map("mapDiv", {
+          basemap: "streets",
+          center: [77.0266, 28.4595],
+          zoom: 8
+        });  
+        
+        var template  = new PopupTemplate();
+        template.setTitle("<b>City</b>");
+        template.setContent(getContent); //this will call the getContent function where you can custom build your fields and add video
+    
+        function getContent(graphic){
+          var Content = "<b>City Name:  </b>" + graphic.attributes.areaname + "<br> <b>Population:  </b>" + graphic.attributes.pop2000 + "<br>"; 
+          var Hyperlink = '<video width="250" height="250" controls><source src=http://techslides.com/demos/sample-videos/small.mp4 type=video/mp4></video> ';
+;
+      
+          return Content + Hyperlink;
+        }   
+        
+        var featureLayer = new FeatureLayer("https://onemapggm.gmda.gov.in/server/rest/services/Gmda_Survey/GMDA_Ownership_Roads/FeatureServer/0",{
+    
+            infoTemplate: template,
+            outFields: ["*"]
+        });  
+        
+        map.addLayer(featureLayer);  
+        
+                      
+
+      });
+    </script>
+  </head>
+  
+  <body>
+    
+    <div id="mapDiv"></div>
+
+  </body>
+</html>
